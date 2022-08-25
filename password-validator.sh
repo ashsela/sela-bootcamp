@@ -6,6 +6,7 @@
 password_length=10
 Red='\033[0;31m'       
 Green='\033[0;32m'  
+INPUT_PASSWORD=$1
 
 
 validate (){ 
@@ -29,7 +30,21 @@ then
 	fi
 }    
 
-validate $1
+while getopts ":f:" OPTION; do
+	case $OPTION in
+		f)
+			FILE_PATH=$OPTARG
+			;;
+	esac
+done
+
+if [ ! -z "$FILE_PATH" ]
+	then
+		INPUT_PASSWORD=$(<$FILE_PATH)
+	fi
+
+
+validate $INPUT_PASSWORD
 
 printf "${Green}success password is secure\n"
 exit 0
